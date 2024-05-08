@@ -1,3 +1,4 @@
+#urls.py
 """
 URL configuration for taskMgmt project.
 
@@ -27,7 +28,25 @@ urlpatterns = [
     path('delete/<int:task_id>/', views.delete_task, name='delete_task'),  # URL for deleting a task
     path('task/<int:task_id>/', views.task_detail, name='task_detail'),  # URL for task details
     path('complete/<int:task_id>/', views.mark_complete, name='mark_complete'),  # URL for marking a task as complete
+
+    #Authentication URLs
     path('login/', auth_views.LoginView.as_view(), name='login'),  # URL for login
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # URL for logout
+
+    # Registration View
+    path('register/', views.register, name='register'),
+
+    # Profile paths
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+
+
+    # Password Reset URLs
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+    #Admin URL
     path('admin/', admin.site.urls),  # Admin URL
 ]

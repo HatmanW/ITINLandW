@@ -1,5 +1,7 @@
+#forms.py
 from django import forms
 from .models import Task
+from .models import Profile
 
 
 class TaskForm(forms.ModelForm):
@@ -12,3 +14,8 @@ class TaskForm(forms.ModelForm):
             'urgent': forms.RadioSelect(choices=[(True, 'Urgent'), (False, 'Not Urgent')]),
             'important': forms.RadioSelect(choices=[(True, 'Important'), (False, 'Not Important')]),
         }
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'location', 'birth_date']

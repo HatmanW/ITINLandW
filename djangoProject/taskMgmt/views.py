@@ -1,7 +1,45 @@
+#views.py
+
+#imports
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Task
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+from .models import Task, Profile
+from .forms import ProfileForm
 from .forms import TaskForm
 
+@login_required
+def profile(request):
+    try:
+        profile = request.user.profile
+    except ObjectDoesNotExist:
+        profile = None
+
+    return render(request, 'taskMgmt/profile.html', {'user': request.user, 'profile': profile})
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, 'taskMgmt/edit_profile.html', {'form': form})
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Registration successful. You can now log in!')
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
 def task_list(request):
     # Handling the form submission for adding new tasks
     if request.method == "POST":
